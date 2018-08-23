@@ -2,7 +2,7 @@
 
 namespace Nomad.DotNet.Model
 {
-    public class ParameterizedJobConfig
+    public class ParameterizedJobConfig : ApiObject<ParameterizedJobConfig>
     {
         public string Payload { get; set; }
         public IList<string> MetaRequired { get; set; } = new List<string>();

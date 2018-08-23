@@ -2,7 +2,7 @@
 
 namespace Nomad.DotNet.Model
 {
-    public class TaskGroup
+    public class TaskGroup : ApiObject<TaskGroup>
     {
         public string Name { get; set; }
         public int Count { get; set; }

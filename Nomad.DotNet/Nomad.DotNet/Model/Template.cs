@@ -1,6 +1,6 @@
 ﻿namespace Nomad.DotNet.Model
 {
-    public class Template
+    public class Template : ApiObject<Template>
     {
     }
 }

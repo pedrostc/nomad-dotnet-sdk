@@ -1,6 +1,6 @@
 ﻿namespace Nomad.DotNet.Model
 {
-    public class TaskEvent
+    public class TaskEvent : ApiObject<TaskEvent>
     {
         public string Type { get; set; }
         public long Time { get; set; }

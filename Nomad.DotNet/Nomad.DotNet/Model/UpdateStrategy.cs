@@ -1,6 +1,6 @@
 ﻿namespace Nomad.DotNet.Model
 {
-    public class UpdateStrategy
+    public class UpdateStrategy : ApiObject<UpdateStrategy>
     {
         public long Stagger { get; set; }
         public int MaxParallel { get; set; }

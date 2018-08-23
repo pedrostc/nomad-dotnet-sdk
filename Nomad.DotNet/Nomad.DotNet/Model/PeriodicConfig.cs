@@ -1,6 +1,6 @@
 ﻿namespace Nomad.DotNet.Model
 {
-    public class PeriodicConfig
+    public class PeriodicConfig : ApiObject<PeriodicConfig>
     {
         public bool Enabled { get; set; }
         public string Spec { get; set; }

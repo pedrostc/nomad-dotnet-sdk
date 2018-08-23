@@ -2,7 +2,7 @@
 
 namespace Nomad.DotNet.Model
 {
-    public class Task
+    public class Task : ApiObject<Task>
     {
         public string Name { get; set; }
         public string Driver { get; set; }

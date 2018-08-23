@@ -2,7 +2,7 @@
 
 namespace Nomad.DotNet.Model
 {
-    public class NetworkResource
+    public class NetworkResource : ApiObject<NetworkResource>
     {
         public string Device { get; set; }
         public string Cidr { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace Nomad.DotNet.Model
 {
-    public class Vault
+    public class Vault : ApiObject<Vault>
     {
     }
 }

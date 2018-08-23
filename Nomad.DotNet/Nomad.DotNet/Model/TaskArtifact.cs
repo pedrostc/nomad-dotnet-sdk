@@ -1,6 +1,6 @@
 ﻿namespace Nomad.DotNet.Model
 {
-    public class TaskArtifact
+    public class TaskArtifact : ApiObject<TaskArtifact>
     {
     }
 }
