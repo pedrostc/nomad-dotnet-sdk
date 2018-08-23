@@ -6,7 +6,7 @@ namespace Nomad.DotNet.Model
 {
     public abstract class ApiObject<T>
     {
-        private IDictionary<string, object> UnmappedProperties => new Dictionary<string, object>();
+        private IDictionary<string, object> UnmappedProperties { get; set; } = new Dictionary<string, object>();
 
         public override string ToString()
         {

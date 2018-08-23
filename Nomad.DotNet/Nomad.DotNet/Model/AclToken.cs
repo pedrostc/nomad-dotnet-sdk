@@ -10,7 +10,7 @@ namespace Nomad.DotNet.Model
         public string SecretId { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
-        public IList<string> Policies => new List<string>();
+        public IList<string> Policies { get; set; } = new List<string>();
         public bool Global { get; set; }
         public DateTime CreateTime { get; set; }
         public BigInteger CreateIndex { get; set; }

@@ -7,7 +7,7 @@ namespace Nomad.DotNet.Model
         public string Name { get; set; }
         public string Addr { get; set; }
         public int Port { get; set; }
-        public IDictionary<string, string> Tags => new Dictionary<string, string>();
+        public IDictionary<string, string> Tags { get; set; } = new Dictionary<string, string>();
         public string Status { get; set; }
         public byte ProtocolMin { get; set; }
         public byte ProtocolMax { get; set; }
