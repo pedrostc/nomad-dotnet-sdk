@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using Newtonsoft.Json;
+using System.Numerics;
 
 namespace Nomad.DotNet.Model
 {
@@ -14,7 +13,7 @@ namespace Nomad.DotNet.Model
         public IList<string> Policies => new List<string>();
         public bool Global { get; set; }
         public DateTime CreateTime { get; set; }
-        public Int64 CreateIndex { get; set; }
-        public Int64 ModifyIndex { get; set; }
+        public BigInteger CreateIndex { get; set; }
+        public BigInteger ModifyIndex { get; set; }
     }
 }
