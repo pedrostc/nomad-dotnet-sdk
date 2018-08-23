@@ -4,8 +4,9 @@ using Newtonsoft.Json;
 
 namespace Nomad.DotNet.Model
 {
-    public abstract class ApiModel<T>
+    public abstract class ApiObject<T>
     {
+        private IDictionary<string, object> UnmappedProperties => new Dictionary<string, object>();
         public Int64 CreateIndex { get; set; }
         public Int64 ModifyIndex { get; set; }
 

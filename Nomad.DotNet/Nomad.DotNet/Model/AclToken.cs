@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Nomad.DotNet.Model
 {
-    public class AclToken : ApiModel<AclPolicy>
+    public class AclToken : ApiObject<AclPolicy>
     {
         public string AcessorId { get; set; }
         public string SecretId { get; set; }
