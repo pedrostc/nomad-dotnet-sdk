@@ -9,5 +9,7 @@ namespace Nomad.DotNet.Model
         public string Name { get; set; }
         public string Description { get; set; }
         public string Rules { get; set; }
+        public Int64 CreateIndex { get; set; }
+        public Int64 ModifyIndex { get; set; }
     }
 }

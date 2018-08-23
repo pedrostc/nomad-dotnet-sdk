@@ -14,5 +14,7 @@ namespace Nomad.DotNet.Model
         public IList<string> Policies => new List<string>();
         public bool Global { get; set; }
         public DateTime CreateTime { get; set; }
+        public Int64 CreateIndex { get; set; }
+        public Int64 ModifyIndex { get; set; }
     }
 }
