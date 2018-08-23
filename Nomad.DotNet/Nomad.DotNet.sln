@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nomad.DotNet", "Nomad.DotNet\Nomad.DotNet.csproj", "{8DAB3E91-E5A9-4723-8332-0AE33D9BF2C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nomad.DotNet.Tests", "Nomad.DotNet.Tests\Nomad.DotNet.Tests.csproj", "{12EA4ADA-8E88-4BF3-911C-887315DE1EB5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8DAB3E91-E5A9-4723-8332-0AE33D9BF2C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DAB3E91-E5A9-4723-8332-0AE33D9BF2C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DAB3E91-E5A9-4723-8332-0AE33D9BF2C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DAB3E91-E5A9-4723-8332-0AE33D9BF2C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12EA4ADA-8E88-4BF3-911C-887315DE1EB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12EA4ADA-8E88-4BF3-911C-887315DE1EB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12EA4ADA-8E88-4BF3-911C-887315DE1EB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12EA4ADA-8E88-4BF3-911C-887315DE1EB5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A0549C17-07DE-4E68-BFE8-C72A62EE88FC}
+	EndGlobalSection
+EndGlobal
