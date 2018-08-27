@@ -10,7 +10,10 @@ namespace Nomad.DotNet.Model
 
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(this, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
         }
 
         public static T FromJsonString(string json)
