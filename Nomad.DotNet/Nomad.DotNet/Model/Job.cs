@@ -12,7 +12,7 @@ namespace Nomad.DotNet.Model
         public string ParentId { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
-        public int Priority { get; set; }
+        public int? Priority { get; set; }
         public bool AllAtOnce { get; set; }
         public IList<string> Datacenters { get; set; } = new List<string>();
         public IList<Constraint> Constraints { get; set; } = new List<Constraint>();
@@ -26,10 +26,10 @@ namespace Nomad.DotNet.Model
         public string Status { get; set; }
         public string StatusDescription { get; set; }
         public bool Stable { get; set; }
-        public BigInteger Version { get; set; }
-        public long SubmitTime { get; set; }
-        public BigInteger CreateIndex { get; set; }
-        public BigInteger ModifyIndex { get; set; }
-        public BigInteger JobModifyIndex { get; set; }
+        public BigInteger? Version { get; set; }
+        public long? SubmitTime { get; set; }
+        public BigInteger? CreateIndex { get; set; }
+        public BigInteger? ModifyIndex { get; set; }
+        public BigInteger? JobModifyIndex { get; set; }
     }
 }

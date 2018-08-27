@@ -5,7 +5,7 @@ namespace Nomad.DotNet.Model
     public class TaskGroup : ApiObject<TaskGroup>
     {
         public string Name { get; set; }
-        public int Count { get; set; }
+        public int? Count { get; set; }
         public IList<Constraint> Constraints { get; set; } = new List<Constraint>();
         public IList<Task> Tasks { get; set; } = new List<Task>();
         public RestartPolicy RestartPolicy { get; set; }
