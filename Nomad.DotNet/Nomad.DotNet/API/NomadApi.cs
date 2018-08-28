@@ -47,14 +47,20 @@ namespace Nomad.DotNet.API
 
             return builder.Uri;
         }
-        protected Uri buildUriForCollection()
+        protected Uri buildUriForCollectionMethod(string method)
         {
             BetterUriBuilder builder = new BetterUriBuilder(apiConfig.HostUri);
 
             builder.AddPathPart(apiVersion);
             builder.AddPathPart(collectionName);
+            if(!string.IsNullOrEmpty(method))
+                builder.AddPathPart(method);
 
             return builder.Uri;
+        }
+        protected Uri buildUriForCollection()
+        {
+            return buildUriForCollectionMethod(string.Empty);
         }
     }
 }

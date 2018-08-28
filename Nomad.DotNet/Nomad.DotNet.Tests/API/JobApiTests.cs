@@ -34,7 +34,6 @@ namespace Nomad.DotNet.Tests.API
 
             Assert.AreEqual(1, mockHttp.GetMatchCount(expectedRequest));
         }
-
         [TestMethod]
         public void Read_ExistingJobId_ReturnsPopulatedJob()
         {
@@ -55,7 +54,6 @@ namespace Nomad.DotNet.Tests.API
             Assert.AreEqual(jobId, job.Id);
             Assert.AreEqual(1, job.Datacenters.Count);
         }
-
         [TestMethod]
         [ExpectedException(typeof(EntityNotFound))]
         public void Read_InexistentJobId_ThrowsEntityNotFoundException()
@@ -82,7 +80,6 @@ namespace Nomad.DotNet.Tests.API
 
             Assert.AreEqual(1, mockHttp.GetMatchCount(expectedRequest));
         }
-
         [TestMethod]
         public void List_WithPrefix_CallsCorrectUriWithQueryString()
         {
@@ -98,7 +95,6 @@ namespace Nomad.DotNet.Tests.API
 
             Assert.AreEqual(1, mockHttp.GetMatchCount(expectedRequest));
         }
-
         [TestMethod]
         public void List_NoParams_ReturnsPopulatedJobList()
         {
@@ -154,27 +150,45 @@ namespace Nomad.DotNet.Tests.API
                 }
             };
 
-            CreationRequest request = new CreationRequest(fakeJob);
+            CreateRequest request = new CreateRequest(fakeJob);
             HttpClient client = new HttpClient();
             JobApi api = new JobApi(client, apiConfig);
 
-            CreationResponse response = api.Create(request).GetAwaiter().GetResult();
+            CreateResponse response = api.Create(request).GetAwaiter().GetResult();
 
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.EvalId);
         }
-
         [TestMethod]
         [ExpectedException(typeof(BadRequest))]
         public void Create_EmptyObject_ThrowsException()
         {
             Job fakeJob = new Job();
 
-            CreationRequest request = new CreationRequest(fakeJob);
+            CreateRequest request = new CreateRequest(fakeJob);
             HttpClient client = new HttpClient();
             JobApi api = new JobApi(client, apiConfig);
 
-            CreationResponse response = api.Create(request).GetAwaiter().GetResult();
+            CreateResponse response = api.Create(request).GetAwaiter().GetResult();
+        }
+
+        [TestMethod]
+        public void Parse_ValidRequest_ReturnsValidJob()
+        {
+            ParseRequest request = new ParseRequest
+            {
+                JobHCL = "job \"example\" { type = \"service\" group \"cache\" {} }",
+                Canonicalize = true
+            };
+            HttpClient client = new HttpClient();
+            JobApi api = new JobApi(client, apiConfig);
+
+            Job response = api.Parse(request).GetAwaiter().GetResult();
+
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Id);
+            Assert.AreEqual("example", response.Id);
+            Assert.AreEqual("service", response.Type);
         }
     }
 }

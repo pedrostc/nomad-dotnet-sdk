@@ -60,13 +60,25 @@ namespace Nomad.DotNet.API
             return jobs;
         }
 
-        public async Task<CreationResponse> Create(CreationRequest requestObj)
+        public async Task<CreateResponse> Create(CreateRequest requestObj)
         {
             HttpResponseMessage responseMessage = await httpClient.PostAsJsonAsync(buildUriForCollection(), requestObj);
 
             await HandleReponseError(responseMessage);
 
-            CreationResponse response = await responseMessage.Content.ReadAsAsync<CreationResponse>();
+            CreateResponse response = await responseMessage.Content.ReadAsAsync<CreateResponse>();
+            return response;
+        }
+
+        public async Task<Job> Parse(ParseRequest requestObj)
+        {
+            Uri uri = buildUriForCollectionMethod("parse");
+            HttpResponseMessage responseMessage = 
+                await httpClient.PostAsJsonAsync(uri, requestObj);
+
+            await HandleReponseError(responseMessage);
+
+            Job response = await responseMessage.Content.ReadAsAsync<Job>();
             return response;
         }
     }
