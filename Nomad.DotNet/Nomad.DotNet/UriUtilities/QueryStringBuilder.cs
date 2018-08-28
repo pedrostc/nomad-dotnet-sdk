@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 
 namespace Nomad.DotNet.UriUtilities
 {
@@ -13,7 +14,7 @@ namespace Nomad.DotNet.UriUtilities
             {
                 if (fields.Count > 0)
                     return fields
-                        .Select(keyValPair => $"{keyValPair.Key}={keyValPair.Value}")
+                        .Select(keyValPair => $"{ HttpUtility.UrlEncode(keyValPair.Key)}={ HttpUtility.UrlEncode(keyValPair.Value)}")
                         .Aggregate((workingString, nextField) => $"{workingString}&{nextField}");
                 else
                     return string.Empty;
