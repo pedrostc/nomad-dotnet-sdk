@@ -7,7 +7,6 @@ using Nomad.DotNet.Exceptions;
 using System.Collections.Generic;
 using Nomad.DotNet.API.JobRequests;
 using System.Net.Http;
-using System.Collections.Specialized;
 
 namespace Nomad.DotNet.Tests.API
 {
@@ -20,7 +19,7 @@ namespace Nomad.DotNet.Tests.API
         };
 
         [TestMethod]
-        public void GetByIdAsync_ValidJobId_CallsCorrectUri()
+        public void Read_ValidJobId_CallsCorrectUri()
         {
             string jobId = "job-1";
             string jobJson = "{}";
@@ -37,7 +36,7 @@ namespace Nomad.DotNet.Tests.API
         }
 
         [TestMethod]
-        public void GetByIdAsync_ExistingJobId_ReturnsPopulatedJob()
+        public void Read_ExistingJobId_ReturnsPopulatedJob()
         {
             string jobId = "job-1";
             string job1Json = "{\"AllAtOnce\": false, \"Constraints\": null, \"CreateIndex\": 1, \"Datacenters\": [ \"dc1\" ], \"Dispatched\": false, \"ID\": \"job-1\", \"JobModifyIndex\": 12, \"Meta\": null, \"ModifyIndex\": 14, \"Name\": \"job-1\", \"Namespace\": \"default\", \"ParameterizedJob\": null, \"ParentID\": \"\", \"Payload\": null, \"Periodic\": null, \"Priority\": 50, \"Region\": \"global\", \"Stable\": false, \"Status\": \"running\", \"StatusDescription\": \"\", \"Stop\": false, \"SubmitTime\": 1534965921447786200, \"TaskGroups\": [], \"Type\": \"batch\", \"Update\": { \"AutoRevert\": false, \"Canary\": 0, \"HealthCheck\": \"\", \"HealthyDeadline\": 0, \"MaxParallel\": 0, \"MinHealthyTime\": 0, \"ProgressDeadline\": 0, \"Stagger\": 0 }, \"VaultToken\": \"\", \"Version\": 0}";
@@ -59,7 +58,7 @@ namespace Nomad.DotNet.Tests.API
 
         [TestMethod]
         [ExpectedException(typeof(EntityNotFound))]
-        public void GetByIdAsync_InexistentJobId_ThrowsEntityNotFoundException()
+        public void Read_InexistentJobId_ThrowsEntityNotFoundException()
         {
             string jobId = "job-2";
             MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
@@ -69,7 +68,7 @@ namespace Nomad.DotNet.Tests.API
         }
 
         [TestMethod]
-        public void ListAsync_NoParams_CallsCorrectUri()
+        public void List_NoParams_CallsCorrectUri()
         {
             string jobsJson = "[]";
             Uri jobsUri = new Uri("http://127.0.0.1:4646/v1/jobs");
@@ -85,7 +84,7 @@ namespace Nomad.DotNet.Tests.API
         }
 
         [TestMethod]
-        public void ListAsync_WithPrefix_CallsCorrectUriWithQueryString()
+        public void List_WithPrefix_CallsCorrectUriWithQueryString()
         {
             string jobsJson = "[]";
             Uri jobsUri = new Uri("http://127.0.0.1:4646/v1/jobs?prefix=job");
@@ -101,7 +100,7 @@ namespace Nomad.DotNet.Tests.API
         }
 
         [TestMethod]
-        public void ListAsync_NoParams_ReturnsPopulatedJobList()
+        public void List_NoParams_ReturnsPopulatedJobList()
         {
             string jobsJson = "[{\"AllAtOnce\": false, \"Constraints\": null, \"CreateIndex\": 1, \"Datacenters\": [ \"dc1\" ], \"Dispatched\": false, \"ID\": \"job-1\", \"JobModifyIndex\": 12, \"Meta\": null, \"ModifyIndex\": 14, \"Name\": \"job-1\", \"Namespace\": \"default\", \"ParameterizedJob\": null, \"ParentID\": \"\", \"Payload\": null, \"Periodic\": null, \"Priority\": 50, \"Region\": \"global\", \"Stable\": false, \"Status\": \"running\", \"StatusDescription\": \"\", \"Stop\": false, \"SubmitTime\": 1534965921447786200, \"TaskGroups\": [], \"Type\": \"batch\", \"Update\": { \"AutoRevert\": false, \"Canary\": 0, \"HealthCheck\": \"\", \"HealthyDeadline\": 0, \"MaxParallel\": 0, \"MinHealthyTime\": 0, \"ProgressDeadline\": 0, \"Stagger\": 0 }, \"VaultToken\": \"\", \"Version\": 0}]";
             Uri jobsUri = new Uri("http://127.0.0.1:4646/v1/jobs");
@@ -159,7 +158,7 @@ namespace Nomad.DotNet.Tests.API
             HttpClient client = new HttpClient();
             JobApi api = new JobApi(client, apiConfig);
 
-            CreationResponse response = api.RegisterAsync(request).GetAwaiter().GetResult();
+            CreationResponse response = api.Create(request).GetAwaiter().GetResult();
 
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.EvalId);
@@ -167,7 +166,7 @@ namespace Nomad.DotNet.Tests.API
 
         [TestMethod]
         [ExpectedException(typeof(BadRequest))]
-        public void CreateAsync_EmptyObject_ThrowsException()
+        public void Create_EmptyObject_ThrowsException()
         {
             Job fakeJob = new Job();
 
@@ -175,7 +174,7 @@ namespace Nomad.DotNet.Tests.API
             HttpClient client = new HttpClient();
             JobApi api = new JobApi(client, apiConfig);
 
-            CreationResponse response = api.RegisterAsync(request).GetAwaiter().GetResult();
+            CreationResponse response = api.Create(request).GetAwaiter().GetResult();
         }
     }
 }

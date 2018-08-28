@@ -60,7 +60,7 @@ namespace Nomad.DotNet.API
             return jobs;
         }
 
-        public async Task<CreationResponse> RegisterAsync(CreationRequest requestObj)
+        public async Task<CreationResponse> Create(CreationRequest requestObj)
         {
             HttpResponseMessage responseMessage = await httpClient.PostAsJsonAsync(buildUriForCollection(), requestObj);
 
