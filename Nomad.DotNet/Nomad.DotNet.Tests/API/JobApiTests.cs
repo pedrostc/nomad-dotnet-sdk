@@ -7,13 +7,17 @@ using Nomad.DotNet.Exceptions;
 using System.Collections.Generic;
 using Nomad.DotNet.API.JobRequests;
 using System.Net.Http;
+using System.Collections.Specialized;
 
 namespace Nomad.DotNet.Tests.API
 {
     [TestClass]
     public class JobApiTests
     {
-        UriBuilder baseUriBuilder = new UriBuilder("http", "127.0.0.1", 4646);
+        NomadApiConfig apiConfig = new NomadApiConfig
+        {
+            HostUri = "http://127.0.0.1:4646"
+        };
 
         [TestMethod]
         public void GetByIdAsync_ValidJobId_CallsCorrectUri()
@@ -26,8 +30,8 @@ namespace Nomad.DotNet.Tests.API
             var expectedRequest = mockHttp.When(jobUri.AbsoluteUri)
                     .Respond("application/json", jobJson);
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), baseUriBuilder.Uri);
-            Job job = api.GetByIdAsync(jobId).GetAwaiter().GetResult();
+            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            Job job = api.Read(jobId).GetAwaiter().GetResult();
 
             Assert.AreEqual(1, mockHttp.GetMatchCount(expectedRequest));
         }
@@ -43,10 +47,10 @@ namespace Nomad.DotNet.Tests.API
             mockHttp.When(job1Uri.AbsoluteUri)
                     .Respond("application/json", job1Json);
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), baseUriBuilder.Uri);
+            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
 
 
-            Job job = api.GetByIdAsync(jobId).GetAwaiter().GetResult();
+            Job job = api.Read(jobId).GetAwaiter().GetResult();
 
             Assert.IsNotNull(job);
             Assert.AreEqual(jobId, job.Id);
@@ -59,9 +63,9 @@ namespace Nomad.DotNet.Tests.API
         {
             string jobId = "job-2";
             MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), baseUriBuilder.Uri);
+            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
 
-            Job job = api.GetByIdAsync(jobId).GetAwaiter().GetResult();
+            Job job = api.Read(jobId).GetAwaiter().GetResult();
         }
 
         [TestMethod]
@@ -74,8 +78,24 @@ namespace Nomad.DotNet.Tests.API
             var expectedRequest = mockHttp.When(jobsUri.AbsoluteUri)
                     .Respond("application/json", jobsJson);
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), baseUriBuilder.Uri);
-            IList<Job> jobs = api.ListAsync().GetAwaiter().GetResult();
+            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            IList<Job> jobs = api.List().GetAwaiter().GetResult();
+
+            Assert.AreEqual(1, mockHttp.GetMatchCount(expectedRequest));
+        }
+
+        [TestMethod]
+        public void ListAsync_WithPrefix_CallsCorrectUriWithQueryString()
+        {
+            string jobsJson = "[]";
+            Uri jobsUri = new Uri("http://127.0.0.1:4646/v1/jobs?prefix=job");
+
+            MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
+            var expectedRequest = mockHttp.When(jobsUri.AbsoluteUri)
+                    .Respond("application/json", jobsJson);
+
+            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            IList<Job> jobs = api.List("job").GetAwaiter().GetResult();
 
             Assert.AreEqual(1, mockHttp.GetMatchCount(expectedRequest));
         }
@@ -90,10 +110,10 @@ namespace Nomad.DotNet.Tests.API
             mockHttp.When(jobsUri.AbsoluteUri)
                     .Respond("application/json", jobsJson);
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), baseUriBuilder.Uri);
+            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
 
 
-            IList<Job> jobs = api.ListAsync().GetAwaiter().GetResult();
+            IList<Job> jobs = api.List().GetAwaiter().GetResult();
 
             Assert.IsNotNull(jobs);
             Assert.AreEqual(1, jobs.Count);
@@ -126,7 +146,7 @@ namespace Nomad.DotNet.Tests.API
                                     { "command", "ping" },
                                     {
                                         "args",
-                                        new [] { "8.8.8.8" }
+                                        new [] { "8.8.8.8", "-n", "9" }
                                     }
                                 }
                             }
@@ -135,18 +155,27 @@ namespace Nomad.DotNet.Tests.API
                 }
             };
 
-            CreationRequest request = new CreationRequest
-            {
-                Job = fakeJob
-            };
-
+            CreationRequest request = new CreationRequest(fakeJob);
             HttpClient client = new HttpClient();
-            JobApi api = new JobApi(client, baseUriBuilder.Uri);
+            JobApi api = new JobApi(client, apiConfig);
 
-            CreationResponse response = api.CreateAsync(request).GetAwaiter().GetResult();
+            CreationResponse response = api.RegisterAsync(request).GetAwaiter().GetResult();
 
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.EvalId);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(BadRequest))]
+        public void CreateAsync_EmptyObject_ThrowsException()
+        {
+            Job fakeJob = new Job();
+
+            CreationRequest request = new CreationRequest(fakeJob);
+            HttpClient client = new HttpClient();
+            JobApi api = new JobApi(client, apiConfig);
+
+            CreationResponse response = api.RegisterAsync(request).GetAwaiter().GetResult();
         }
     }
 }

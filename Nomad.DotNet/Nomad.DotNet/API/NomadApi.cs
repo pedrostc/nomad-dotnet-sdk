@@ -1,11 +1,10 @@
-﻿using Nomad.DotNet.Exceptions;
-using Nomad.DotNet.Model;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+
+using Nomad.DotNet.Exceptions;
+using Nomad.DotNet.Model;
+using Nomad.DotNet.UriUtilities;
 
 namespace Nomad.DotNet.API
 {
@@ -16,77 +15,46 @@ namespace Nomad.DotNet.API
         protected abstract string collectionName { get; }
 
         protected HttpClient httpClient;
-        Uri baseUri;
-        
-        public NomadApi(HttpClient httpClient, Uri baseUri)
+        private Uri baseUri;
+        private NomadApiConfig apiConfig;
+
+        public NomadApi(HttpClient httpClient, NomadApiConfig apiConfig)
         {
             this.httpClient = httpClient;
-            this.baseUri = baseUri;
+            this.baseUri = new Uri(apiConfig.HostUri);
+            this.apiConfig = apiConfig;
         }
 
-        private void HandleReponseError(HttpResponseMessage response)
+        protected async System.Threading.Tasks.Task HandleReponseError(HttpResponseMessage response)
         {
             switch (response.StatusCode)
             {
                 case (HttpStatusCode.NotFound):
                     throw new EntityNotFound();
+                case (HttpStatusCode.BadRequest):
+                    string errorMsg = await response.Content.ReadAsStringAsync();
+                    throw new BadRequest(errorMsg);
             }
         }
 
-        protected Uri buildUriForResource()
-        {
-            Uri relativeUri = new Uri($"{apiVersion}/{resourceName}", UriKind.Relative);
-            Uri fullUri = new Uri(baseUri, relativeUri);
-
-            return fullUri;
-        }
         protected Uri buildUriForResourceId(string id)
         {
-            Uri relativeUri = new Uri($"{apiVersion}/{resourceName}/{id}", UriKind.Relative);
-            Uri fullUri = new Uri(baseUri, relativeUri);
+            BetterUriBuilder builder = new BetterUriBuilder(apiConfig.HostUri);
 
-            return fullUri;
+            builder.AddPathPart(apiVersion);
+            builder.AddPathPart(resourceName);
+            builder.AddPathPart(id);
+
+            return builder.Uri;
         }
         protected Uri buildUriForCollection()
         {
-            Uri relativeUri = new Uri($"{apiVersion}/{collectionName}", UriKind.Relative);
-            Uri fullUri = new Uri(baseUri, relativeUri);
+            BetterUriBuilder builder = new BetterUriBuilder(apiConfig.HostUri);
 
-            return fullUri;
-        }
+            builder.AddPathPart(apiVersion);
+            builder.AddPathPart(collectionName);
 
-        public async Task<T> GetByIdAsync(string id)
-        {
-            Uri uri = buildUriForResourceId(id);
-
-            HttpResponseMessage response = await httpClient.GetAsync(uri);
-           
-            if(!response.IsSuccessStatusCode)
-            {
-                HandleReponseError(response);
-            }
-
-            T resource = await response.Content.ReadAsAsync<T>();
-            return resource;
-
-        }
-        public async Task<IList<T>> ListAsync()
-        {
-            Uri uri = buildUriForCollection();
-
-            HttpResponseMessage response = await httpClient.GetAsync(uri);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                HandleReponseError(response);
-            }
-
-            IList<T> resource = await response.Content.ReadAsAsync<List<T>>();
-            return resource;
-        }
-        public async System.Threading.Tasks.Task CreateAsync()
-        {
-
+            return builder.Uri;
         }
     }
 }
