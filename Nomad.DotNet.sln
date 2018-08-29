@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nomad.DotNet", "Nomad.DotNet\Nomad.DotNet.csproj", "{8DAB3E91-E5A9-4723-8332-0AE33D9BF2C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nomad.DotNet", "src\Nomad.DotNet\Nomad.DotNet.csproj", "{8DAB3E91-E5A9-4723-8332-0AE33D9BF2C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nomad.DotNet.Tests", "Nomad.DotNet.Tests\Nomad.DotNet.Tests.csproj", "{12EA4ADA-8E88-4BF3-911C-887315DE1EB5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nomad.DotNet.Tests", "src\Nomad.DotNet.Tests\Nomad.DotNet.Tests.csproj", "{12EA4ADA-8E88-4BF3-911C-887315DE1EB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
