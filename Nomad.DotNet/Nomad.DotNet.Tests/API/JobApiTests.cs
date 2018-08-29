@@ -29,7 +29,7 @@ namespace Nomad.DotNet.Tests.API
             var expectedRequest = mockHttp.When(jobUri.AbsoluteUri)
                     .Respond("application/json", jobJson);
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
             Job job = api.Read(jobId).GetAwaiter().GetResult();
 
             Assert.AreEqual(1, mockHttp.GetMatchCount(expectedRequest));
@@ -45,7 +45,7 @@ namespace Nomad.DotNet.Tests.API
             mockHttp.When(job1Uri.AbsoluteUri)
                     .Respond("application/json", job1Json);
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
 
 
             Job job = api.Read(jobId).GetAwaiter().GetResult();
@@ -60,7 +60,7 @@ namespace Nomad.DotNet.Tests.API
         {
             string jobId = "job-2";
             MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
 
             Job job = api.Read(jobId).GetAwaiter().GetResult();
         }
@@ -76,7 +76,7 @@ namespace Nomad.DotNet.Tests.API
             var expectedRequest = mockHttp.When(jobsUri.AbsoluteUri)
                     .Respond("application/json", jobsJson);
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
             IList<Job> jobs = api.List().GetAwaiter().GetResult();
 
             Assert.AreEqual(1, mockHttp.GetMatchCount(expectedRequest));
@@ -91,7 +91,7 @@ namespace Nomad.DotNet.Tests.API
             var expectedRequest = mockHttp.When(jobsUri.AbsoluteUri)
                     .Respond("application/json", jobsJson);
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
             IList<Job> jobs = api.List("job").GetAwaiter().GetResult();
 
             Assert.AreEqual(1, mockHttp.GetMatchCount(expectedRequest));
@@ -106,7 +106,7 @@ namespace Nomad.DotNet.Tests.API
             mockHttp.When(jobsUri.AbsoluteUri)
                     .Respond("application/json", jobsJson);
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
 
 
             IList<Job> jobs = api.List().GetAwaiter().GetResult();
@@ -154,7 +154,7 @@ namespace Nomad.DotNet.Tests.API
 
             JobCreateRequest request = new JobCreateRequest(fakeJob);
             HttpClient client = new HttpClient();
-            JobApi api = new JobApi(client, apiConfig);
+            JobsApi api = new JobsApi(client, apiConfig);
 
             JobCreateResponse response = api.Create(request).GetAwaiter().GetResult();
 
@@ -169,7 +169,7 @@ namespace Nomad.DotNet.Tests.API
 
             JobCreateRequest request = new JobCreateRequest(fakeJob);
             HttpClient client = new HttpClient();
-            JobApi api = new JobApi(client, apiConfig);
+            JobsApi api = new JobsApi(client, apiConfig);
 
             JobCreateResponse response = api.Create(request).GetAwaiter().GetResult();
         }
@@ -183,7 +183,7 @@ namespace Nomad.DotNet.Tests.API
                 Canonicalize = true
             };
             HttpClient client = new HttpClient();
-            JobApi api = new JobApi(client, apiConfig);
+            JobsApi api = new JobsApi(client, apiConfig);
 
             Job response = api.Parse(request).GetAwaiter().GetResult();
 
@@ -205,7 +205,7 @@ namespace Nomad.DotNet.Tests.API
             var expectedRequest = mockHttp.When(job1Uri.AbsoluteUri)
                     .Respond("application/json", versionsJson);
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
 
             api.Versions(jobId).GetAwaiter().GetResult();
 
@@ -222,7 +222,7 @@ namespace Nomad.DotNet.Tests.API
             mockHttp.When(job1Uri.AbsoluteUri)
                     .Respond("application/json", versionsJson);
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
 
             JobVersionsResponse versionResponse = api.Versions(jobId).GetAwaiter().GetResult();
 
@@ -239,7 +239,7 @@ namespace Nomad.DotNet.Tests.API
 
             MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
 
             api.Versions(jobId).GetAwaiter().GetResult();
         }
@@ -256,7 +256,7 @@ namespace Nomad.DotNet.Tests.API
             var expectedRequest = mockHttp.When(job1Uri.AbsoluteUri)
                     .Respond("application/json", allocationsJson);
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
 
             api.Allocations(jobId).GetAwaiter().GetResult();
 
@@ -273,7 +273,7 @@ namespace Nomad.DotNet.Tests.API
             mockHttp.When(job1Uri.AbsoluteUri)
                     .Respond("application/json", versionsJson);
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
 
             IList<Allocation> allocations = api.Allocations(jobId).GetAwaiter().GetResult();
 
@@ -288,7 +288,7 @@ namespace Nomad.DotNet.Tests.API
 
             MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
 
-            JobApi api = new JobApi(mockHttp.ToHttpClient(), apiConfig);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
 
             api.Allocations(jobId).GetAwaiter().GetResult();
         }

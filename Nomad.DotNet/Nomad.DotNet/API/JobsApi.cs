@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 using Nomad.DotNet.API.JobRequests;
 using Nomad.DotNet.Model;
-using Nomad.DotNet.UriUtilities;
 using JobDispatchResponse = Nomad.DotNet.API.JobRequests.JobDispatchResponse;
 using JobStabilityResponse = Nomad.DotNet.API.JobRequests.JobStabilityResponse;
 using JobPlanResponse = Nomad.DotNet.API.JobRequests.JobPlanResponse;
