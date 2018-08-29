@@ -3,3 +3,5 @@ mono: none
 dotnet: 2.1.2
 script:
     - dotnet restore
+    - dotnet build
+    - dotnet test ./src/Nomad.DotNet.Tests/Nomad.DotNet.Tests.csproj
