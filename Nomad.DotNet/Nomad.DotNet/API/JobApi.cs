@@ -39,47 +39,43 @@ namespace Nomad.DotNet.API
         public async Task<Job> Read(string id)
         {
             Uri uri = buildUriForResourceId(id);
+            Job job = await ProcessGetAsync<Job>(uri);
 
-            HttpResponseMessage response = await httpClient.GetAsync(uri);
-
-            await HandleReponseError(response);
-
-            Job job = await response.Content.ReadAsAsync<Job>();
             return job;
 
         }
         public async Task<IList<Job>> List(string prefix = null)
         {
             Uri uri = buildUriForList(prefix);
+            IList<Job> jobs = await ProcessGetAsync<List<Job>>(uri);
 
-            HttpResponseMessage response = await httpClient.GetAsync(uri);
-
-            await HandleReponseError(response);
-
-            IList<Job> jobs = await response.Content.ReadAsAsync<List<Job>>();
             return jobs;
         }
 
         public async Task<CreateResponse> Create(CreateRequest requestObj)
         {
-            HttpResponseMessage responseMessage = await httpClient.PostAsJsonAsync(buildUriForCollection(), requestObj);
+            Uri uri = buildUriForCollection();
+            CreateResponse response = await ProcessPostAsync<CreateResponse>(uri, requestObj);
 
-            await HandleReponseError(responseMessage);
-
-            CreateResponse response = await responseMessage.Content.ReadAsAsync<CreateResponse>();
             return response;
         }
 
         public async Task<Job> Parse(ParseRequest requestObj)
         {
-            Uri uri = buildUriForCollectionMethod("parse");
-            HttpResponseMessage responseMessage = 
-                await httpClient.PostAsJsonAsync(uri, requestObj);
+            Uri uri = buildUriForCollection("parse");
+            Job response = await ProcessPostAsync<Job>(uri, requestObj);
 
-            await HandleReponseError(responseMessage);
-
-            Job response = await responseMessage.Content.ReadAsAsync<Job>();
             return response;
         }
+
+        public async Task<VersionsResponse> Versions(string id)
+        {
+            string methodName = "versions";
+            Uri uri = buildUriForResourceId(id, methodName);
+            VersionsResponse versions = await ProcessGetAsync<VersionsResponse>(uri);
+
+            return versions;
+        }
+
     }
 }
