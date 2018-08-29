@@ -1,6 +1,6 @@
 ﻿namespace Nomad.DotNet.API.JobRequests
 {
-    public class ParseRequest
+    public class JobParseRequest
     {
         public string JobHCL { get; set; }
         public bool Canonicalize { get; set; }

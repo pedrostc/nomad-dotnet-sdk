@@ -1,6 +1,6 @@
 ﻿namespace Nomad.DotNet.API.JobRequests
 {
-    public class CreateResponse
+    public class JobCreateResponse
     {
         public string EvalId { get; set; }
         public int EvalCreateIndex { get; set; }

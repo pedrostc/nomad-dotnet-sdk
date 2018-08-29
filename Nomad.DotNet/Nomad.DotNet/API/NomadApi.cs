@@ -84,5 +84,15 @@ namespace Nomad.DotNet.API
 
             return response;
         }
+        protected async Task<TResponse> ProcessDeleteAsync<TResponse>(Uri targetUri)
+        {
+            HttpResponseMessage responseMessage = await httpClient.DeleteAsync(targetUri);
+
+            await HandleReponseError(responseMessage);
+
+            TResponse response = await responseMessage.Content.ReadAsAsync<TResponse>();
+
+            return response;
+        }
     }
 }
