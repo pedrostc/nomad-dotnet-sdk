@@ -39,6 +39,22 @@ namespace Nomad.DotNet.API
             }
         }
 
+        protected Uri buildUriForList(string prefix)
+        {
+            Uri uri = buildUriForCollection();
+
+            if (!string.IsNullOrEmpty(prefix))
+                uri = appendPrefixToUri(uri, prefix);
+
+            return uri;
+        }
+        protected Uri appendPrefixToUri(Uri uri, string prefix)
+        {
+            BetterUriBuilder builder = new BetterUriBuilder(uri);
+            builder.AddQueryField(PREFIX_QUERY_FIELD, prefix);
+
+            return builder.Uri;
+        }
         protected Uri buildUriForResourceId(string id, string method = null)
         {
             BetterUriBuilder builder = new BetterUriBuilder(apiConfig.HostUri);

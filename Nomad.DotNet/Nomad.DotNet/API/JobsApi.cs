@@ -12,30 +12,12 @@ using JobPlanResponse = Nomad.DotNet.API.JobRequests.JobPlanResponse;
 
 namespace Nomad.DotNet.API
 {
-    public class JobApi : NomadApi<Job>
+    public class JobsApi : NomadApi<Job>
     {
-        private const string PREFIX_QUERY_FIELD = "prefix";
         protected override string resourceName => "job";
         protected override string collectionName => "jobs";
-        public JobApi(HttpClient httpClient, NomadApiConfig apiConfig) : base(httpClient, apiConfig)
+        public JobsApi(HttpClient httpClient, NomadApiConfig apiConfig) : base(httpClient, apiConfig)
         { }
-
-        private Uri buildUriForList(string prefix)
-        {
-            Uri uri = buildUriForCollection();
-
-            if(!string.IsNullOrEmpty(prefix))
-                uri = appendPrefixToUri(uri, prefix);
-
-            return uri;
-        }
-        private Uri appendPrefixToUri(Uri uri, string prefix)
-        {
-            BetterUriBuilder builder = new BetterUriBuilder(uri);
-            builder.AddQueryField(PREFIX_QUERY_FIELD, prefix);
-
-            return builder.Uri;
-        } 
 
         public async Task<Job> Read(string id)
         {

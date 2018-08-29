@@ -8,33 +8,14 @@ using Nomad.DotNet.UriUtilities;
 
 namespace Nomad.DotNet.API
 {
-    public class AllocationApi : NomadApi<Allocation>
+    public class AllocationsApi : NomadApi<Allocation>
     {
-        private const string PREFIX_QUERY_FIELD = "prefix";
         protected override string resourceName => "allocation";
         protected override string collectionName => "allocations";
 
-        public AllocationApi(HttpClient httpClient, NomadApiConfig apiConfig) :
+        public AllocationsApi(HttpClient httpClient, NomadApiConfig apiConfig) :
             base(httpClient, apiConfig)
         { }
-
-        private Uri buildUriForList(string prefix)
-        {
-            Uri uri = buildUriForCollection();
-
-            if (!string.IsNullOrEmpty(prefix))
-                uri = appendPrefixToUri(uri, prefix);
-
-            return uri;
-        }
-        private Uri appendPrefixToUri(Uri uri, string prefix)
-        {
-            BetterUriBuilder builder = new BetterUriBuilder(uri);
-            builder.AddQueryField(PREFIX_QUERY_FIELD, prefix);
-
-            return builder.Uri;
-        }
-
 
         public async Task<Allocation> Read(string id)
         {
