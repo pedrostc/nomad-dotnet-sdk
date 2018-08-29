@@ -14,14 +14,17 @@ namespace Nomad.DotNet.Model
         public Job Job { get; set; }
         public string TaskGroup { get; set; }
         public Resources Resources { get; set; }
-        public IDictionary<string, Resources> TaskResources { get; set; } = new Dictionary<string, Resources>();
-        public IDictionary<string, string> Services { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, Resources> TaskResources { get; set; } = 
+            new Dictionary<string, Resources>();
+        public IDictionary<string, string> Services { get; set; } = 
+            new Dictionary<string, string>();
         public AllocationMetric Metrics { get; set; }
         public string DesiredStatus { get; set; }
         public string DesiredDescription { get; set; }
         public string ClientStatus { get; set; }
         public string ClientDescription { get; set; }
-        public IDictionary<string, TaskState> TaskStates { get; set; } = new Dictionary<string, TaskState>();
+        public IDictionary<string, TaskState> TaskStates { get; set; } = 
+            new Dictionary<string, TaskState>();
         public string DeploymentId { get; set; }
         public AllocDeploymentStatus DeploymentStatus { get; set; }
         public string PreviousAllocation { get; set; }
