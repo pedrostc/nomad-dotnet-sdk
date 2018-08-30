@@ -6,6 +6,7 @@ namespace Nomad.DotNet.UriUtilities
 {
     public class BetterUriBuilder
     {
+        private const string ROOT_PATH = "/";
         private QueryStringBuilder queryBuilder { get; set; }
         private List<string> pathParts { get; set; }
         private UriBuilder uriBuilder { get; set; }
@@ -14,6 +15,8 @@ namespace Nomad.DotNet.UriUtilities
         {
             get
             {
+                uriBuilder.Path = Path;
+                uriBuilder.Query = Query;
                 return uriBuilder.Uri;
             }
         }
@@ -24,7 +27,7 @@ namespace Nomad.DotNet.UriUtilities
                 return pathParts.Count > 0 ?
                     pathParts
                     .Aggregate((path, part) => $"{path??"/"}/{part}") :
-                    string.Empty;
+                    ROOT_PATH;
             }
         }
         public string Query
@@ -41,13 +44,13 @@ namespace Nomad.DotNet.UriUtilities
             queryBuilder = new QueryStringBuilder();
             pathParts = new List<string>();
         }
-        public BetterUriBuilder(string uri) : this()
-        {
-            uriBuilder = new UriBuilder(uri);
-        }
+        public BetterUriBuilder(string uri) : this(new Uri(uri))
+        { }
         public BetterUriBuilder(Uri uri) : this()
         {
             uriBuilder = new UriBuilder(uri);
+            initializePath();
+            initializeQuery();
         }
         public BetterUriBuilder(string scheme, string hostName) : this()
         {
@@ -58,6 +61,19 @@ namespace Nomad.DotNet.UriUtilities
             uriBuilder = new UriBuilder(scheme, hostName, portNumber);
         }
 
+        private bool isRootPath(string path)
+        {
+            return path == ROOT_PATH;
+        }
+        private void initializePath()
+        {
+            string path = uriBuilder.Path;
+
+            if (isRootPath(path)) return;
+
+            string[] sourceParts = path.Split('/');
+            sourceParts.ToList().ForEach(part => AddPathPart(part));
+        }
         private void updateBuilderPath()
         {
             uriBuilder.Path = Path;
@@ -82,6 +98,10 @@ namespace Nomad.DotNet.UriUtilities
             updateBuilderPath();
         }
 
+        private void initializeQuery()
+        {
+
+        }
         private void updateBuilderQuery()
         {
             uriBuilder.Query = Query;

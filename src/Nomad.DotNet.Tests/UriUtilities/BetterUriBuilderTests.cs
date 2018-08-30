@@ -16,6 +16,16 @@ namespace Nomad.DotNet.Tests.UriUtilities
 
             Assert.AreEqual(uri, builder.Uri.AbsoluteUri);
         }
+        [TestMethod]
+        public void Constructor_stringUriWithPath_PathPropShouldBeCorrect()
+        {
+            string uri = "http://127.0.0.1:8080/path/v1";
+            string expectedPath = "/path/v1";
+
+            BetterUriBuilder builder = new BetterUriBuilder(uri);
+
+            Assert.AreEqual(expectedPath, builder.Path);
+        }
 
         [TestMethod]
         public void Constructor_Uri_UriPropShouldBeCorrect()
@@ -25,6 +35,17 @@ namespace Nomad.DotNet.Tests.UriUtilities
             BetterUriBuilder builder = new BetterUriBuilder(uri);
 
             Assert.AreEqual(uri, builder.Uri);
+        }
+
+        [TestMethod]
+        public void Constructor_UriWithPath_PathPropShouldBeCorrect()
+        {
+            string expectedPath = "/path/v1";
+            Uri uri = new Uri("http://127.0.0.1:8080/path/v1");
+
+            BetterUriBuilder builder = new BetterUriBuilder(uri);
+
+            Assert.AreEqual(expectedPath, builder.Path);
         }
 
         [TestMethod]
@@ -72,6 +93,30 @@ namespace Nomad.DotNet.Tests.UriUtilities
             uriBuilder.AddPathPart("Path");
 
             Assert.AreEqual("Path", uriBuilder.Path);
+        }
+
+        [TestMethod]
+        public void AddPathPart_BaseUriWithPath_PathPropHasCorrectValue()
+        {
+            string uri = "http://127.0.0.1:8080/path/v1";
+            string expectedPath = "/path/v1/job";
+            BetterUriBuilder uriBuilder = new BetterUriBuilder(uri);
+
+            uriBuilder.AddPathPart("job");
+
+            Assert.AreEqual(expectedPath, uriBuilder.Path);
+        }
+
+        [TestMethod]
+        public void AddPathPart_BaseUriWithPath_UriHasTheCorrectValue()
+        {
+            string uri = "http://127.0.0.1:8080/path/v1";
+            string expectedUri = "http://127.0.0.1:8080/path/v1/job";
+            BetterUriBuilder uriBuilder = new BetterUriBuilder(uri);
+
+            uriBuilder.AddPathPart("job");
+
+            Assert.AreEqual(expectedUri, uriBuilder.Uri.AbsoluteUri);
         }
 
         [TestMethod]
@@ -125,9 +170,8 @@ namespace Nomad.DotNet.Tests.UriUtilities
             Assert.AreEqual(expectedUri, uriBuilder.Uri.AbsoluteUri);
         }
 
-
         [TestMethod]
-        public void RemovePathPart_OnlyPart_PathPropIsEmptyString()
+        public void RemovePathPart_OnlyPart_PathIsRoot()
         {
             BetterUriBuilder uriBuilder = new BetterUriBuilder();
 
@@ -135,7 +179,7 @@ namespace Nomad.DotNet.Tests.UriUtilities
             uriBuilder.RemovePathPart("Path");
 
             Assert.IsNotNull(uriBuilder.Path);
-            Assert.AreEqual(string.Empty, uriBuilder.Path);
+            Assert.AreEqual("/", uriBuilder.Path);
         }
 
         [TestMethod]
@@ -152,14 +196,62 @@ namespace Nomad.DotNet.Tests.UriUtilities
         }
 
         [TestMethod]
-        public void ClearPath_NonPopulatedPath_PathPropIsEmptyString()
+        public void RemovePathPart_BaseUriWithPath_PathPropHasCorrectValue()
+        {
+            string uri = "http://127.0.0.1:8080/path/v1";
+            string expectedPath = "/v1";
+            BetterUriBuilder uriBuilder = new BetterUriBuilder(uri);
+
+            uriBuilder.RemovePathPart("path");
+
+            Assert.AreEqual(expectedPath, uriBuilder.Path);
+        }
+
+        [TestMethod]
+        public void RemovePathPart_BaseUriWithPath_UriHasTheCorrectValue()
+        {
+            string uri = "http://127.0.0.1:8080/path/v1";
+            string expectedUri = "http://127.0.0.1:8080/v1";
+            BetterUriBuilder uriBuilder = new BetterUriBuilder(uri);
+
+            uriBuilder.RemovePathPart("path");
+
+            Assert.AreEqual(expectedUri, uriBuilder.Uri.AbsoluteUri);
+        }
+
+        [TestMethod]
+        public void ClearPath_NonPopulatedPath_PathPropIsRoot()
         {
             BetterUriBuilder uriBuilder = new BetterUriBuilder();
 
             uriBuilder.ClearPath();
 
             Assert.IsNotNull(uriBuilder.Path);
-            Assert.AreEqual(string.Empty, uriBuilder.Path);
+            Assert.AreEqual("/", uriBuilder.Path);
+        }
+
+        [TestMethod]
+        public void ClearPath_BaseUriWithPath_PathPropHasCorrectValue()
+        {
+            string uri = "http://127.0.0.1:8080/path/v1";
+            string expectedPath = "/";
+            BetterUriBuilder uriBuilder = new BetterUriBuilder(uri);
+
+            uriBuilder.ClearPath();
+
+            Assert.AreEqual(expectedPath, uriBuilder.Path);
+        }
+
+        [TestMethod]
+        public void ClearPath_BaseUriWithPath_UriHasTheCorrectValue()
+        {
+            string uri = "http://127.0.0.1:8080/path/v1";
+            string expectedUri = "http://127.0.0.1:8080/";
+            BetterUriBuilder uriBuilder = new BetterUriBuilder(uri);
+
+            uriBuilder.ClearPath();
+
+            Assert.AreEqual(expectedUri, uriBuilder.Uri.AbsoluteUri);
         }
 
         [TestMethod]
@@ -182,6 +274,15 @@ namespace Nomad.DotNet.Tests.UriUtilities
             uriBuilder.AddPathPart("Path");
 
             Assert.IsFalse(uriBuilder.ContainsPathPart("v1"));
+        }
+
+        [TestMethod]
+        public void ContainsPath_BaseUriPath_ReturnsTrue()
+        {
+            string uri = "http://127.0.0.1:8080/path/v1";
+            BetterUriBuilder uriBuilder = new BetterUriBuilder(uri);
+
+            Assert.IsTrue(uriBuilder.ContainsPathPart("v1"));
         }
 
         [TestMethod]
