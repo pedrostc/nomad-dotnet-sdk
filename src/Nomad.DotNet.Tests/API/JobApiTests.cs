@@ -7,6 +7,7 @@ using Nomad.DotNet.Exceptions;
 using System.Collections.Generic;
 using Nomad.DotNet.API.JobRequests;
 using System.Net.Http;
+using System.Net;
 
 namespace Nomad.DotNet.Tests.API
 {
@@ -120,6 +121,7 @@ namespace Nomad.DotNet.Tests.API
         [TestMethod]
         public void CreateAsync_ValidRequest_ReturnValidEvaluation()
         {
+            Uri jobsUri = new Uri("http://127.0.0.1:4646/v1/jobs");
             Job fakeJob = new Job
             {
                 Id = "job-10",
@@ -151,10 +153,22 @@ namespace Nomad.DotNet.Tests.API
                     }
                 }
             };
+            string createResponse = @"{
+                ""EvalID"": """",
+                ""EvalCreateIndex"": 0,
+                ""JobModifyIndex"": 109,
+                ""Warnings"": """",
+                ""Index"": 0,
+                ""LastContact"": 0,
+                ""KnownLeader"": false
+            }";
+
+            MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
+            mockHttp.When(HttpMethod.Post, jobsUri.AbsoluteUri)
+                    .Respond("application/json", createResponse);
 
             JobCreateRequest request = new JobCreateRequest(fakeJob);
-            HttpClient client = new HttpClient();
-            JobsApi api = new JobsApi(client, apiConfig);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
 
             JobCreateResponse response = api.Create(request).GetAwaiter().GetResult();
 
@@ -165,11 +179,14 @@ namespace Nomad.DotNet.Tests.API
         [ExpectedException(typeof(BadRequest))]
         public void Create_EmptyObject_ThrowsException()
         {
+            Uri jobsUri = new Uri("http://127.0.0.1:4646/v1/jobs");
             Job fakeJob = new Job();
+            MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
+            mockHttp.When(HttpMethod.Post, jobsUri.AbsoluteUri)
+                    .Respond(HttpStatusCode.BadRequest, "text/plain", "Job must be specified");
 
             JobCreateRequest request = new JobCreateRequest(fakeJob);
-            HttpClient client = new HttpClient();
-            JobsApi api = new JobsApi(client, apiConfig);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
 
             JobCreateResponse response = api.Create(request).GetAwaiter().GetResult();
         }
@@ -177,13 +194,82 @@ namespace Nomad.DotNet.Tests.API
         [TestMethod]
         public void Parse_ValidRequest_ReturnsValidJob()
         {
+            string jsonResponse = @"{
+                ""AllAtOnce"": false,
+                ""Constraints"": null,
+                ""CreateIndex"": 0,
+                ""Datacenters"": null,
+                ""Dispatched"": false,
+                ""ID"": ""example"",
+                ""JobModifyIndex"": 0,
+                ""Meta"": null,
+                ""Migrate"": null,
+                ""ModifyIndex"": 0,
+                ""Name"": ""example"",
+                ""Namespace"": ""default"",
+                ""ParameterizedJob"": null,
+                ""ParentID"": """",
+                ""Payload"": null,
+                ""Periodic"": null,
+                ""Priority"": 50,
+                ""Region"": ""global"",
+                ""Reschedule"": null,
+                ""Stable"": false,
+                ""Status"": """",
+                ""StatusDescription"": """",
+                ""Stop"": false,
+                ""SubmitTime"": null,
+                ""TaskGroups"": [
+                    {
+                        ""Constraints"": null,
+                        ""Count"": 1,
+                        ""EphemeralDisk"": {
+                            ""Migrate"": false,
+                            ""SizeMB"": 300,
+                            ""Sticky"": false
+                        },
+                        ""Meta"": null,
+                        ""Migrate"": {
+                            ""HealthCheck"": ""checks"",
+                            ""HealthyDeadline"": 300000000000,
+                            ""MaxParallel"": 1,
+                            ""MinHealthyTime"": 10000000000
+                        },
+                        ""Name"": ""cache"",
+                        ""ReschedulePolicy"": {
+                            ""Attempts"": 0,
+                            ""Delay"": 30000000000,
+                            ""DelayFunction"": ""exponential"",
+                            ""Interval"": 0,
+                            ""MaxDelay"": 3600000000000,
+                            ""Unlimited"": true
+                        },
+                        ""RestartPolicy"": {
+                            ""Attempts"": 2,
+                            ""Delay"": 15000000000,
+                            ""Interval"": 1800000000000,
+                            ""Mode"": ""fail""
+                        },
+                        ""Tasks"": null,
+                        ""Update"": null
+                    }
+                ],
+                ""Type"": ""service"",
+                ""Update"": null,
+                ""VaultToken"": """",
+                ""Version"": 0
+            }";
             JobParseRequest request = new JobParseRequest
             {
                 JobHCL = "job \"example\" { type = \"service\" group \"cache\" {} }",
                 Canonicalize = true
             };
-            HttpClient client = new HttpClient();
-            JobsApi api = new JobsApi(client, apiConfig);
+            Uri jobsUri = new Uri("http://127.0.0.1:4646/v1/jobs/parse");
+            Job fakeJob = new Job();
+            MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
+            mockHttp.When(HttpMethod.Post, jobsUri.AbsoluteUri)
+                    .Respond("application/json", jsonResponse);
+            JobsApi api = new JobsApi(mockHttp.ToHttpClient(), apiConfig);
 
             Job response = api.Parse(request).GetAwaiter().GetResult();
 
