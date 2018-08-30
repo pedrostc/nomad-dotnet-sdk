@@ -7,7 +7,7 @@ using Nomad.DotNet.Model;
 
 namespace Nomad.DotNet.API
 {
-    public class AclPolicies : NomadApi<AclPolicy>
+    public class AclPolicies : NomadApi
     {
         protected override string resourceName => "acl/policy";
 

@@ -10,7 +10,7 @@ using Nomad.DotNet.UriUtilities;
 
 namespace Nomad.DotNet.API
 {
-    public abstract class NomadApi<T> where T : Model.ApiObject<T>
+    public abstract class NomadApi
     {
         private string apiVersion = "v1";
         private const string PREFIX_QUERY_FIELD = "prefix";

@@ -7,7 +7,7 @@ using Nomad.DotNet.Model;
 
 namespace Nomad.DotNet.API
 {
-    public class AclTokens : NomadApi<AclToken>
+    public class AclTokens : NomadApi
     {
         public AclTokens(HttpClient httpClient, NomadApiConfig apiConfig) : base(httpClient, apiConfig)
         {

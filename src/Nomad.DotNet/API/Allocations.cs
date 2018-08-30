@@ -8,7 +8,7 @@ using Nomad.DotNet.UriUtilities;
 
 namespace Nomad.DotNet.API
 {
-    public class Allocations : NomadApi<Allocation>
+    public class Allocations : NomadApi
     {
         protected override string resourceName => "allocation";
         protected override string collectionName => "allocations";

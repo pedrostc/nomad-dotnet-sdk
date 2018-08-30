@@ -8,9 +8,9 @@ using Nomad.DotNet.UriUtilities;
 
 namespace Nomad.DotNet.API
 {
-    public class Agents : NomadApi<Agent>
+    public class Agent : NomadApi
     {
-        public Agents(HttpClient httpClient, NomadApiConfig apiConfig) : base(httpClient, apiConfig)
+        public Agent(HttpClient httpClient, NomadApiConfig apiConfig) : base(httpClient, apiConfig)
         {
         }
 

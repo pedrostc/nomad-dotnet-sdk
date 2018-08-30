@@ -11,7 +11,7 @@ using JobPlanResponse = Nomad.DotNet.API.JobRequests.JobPlanResponse;
 
 namespace Nomad.DotNet.API
 {
-    public class Jobs : NomadApi<Job>
+    public class Jobs : NomadApi
     {
         protected override string resourceName => "job";
         protected override string collectionName => "jobs";
