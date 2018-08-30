@@ -7,13 +7,13 @@ using Nomad.DotNet.Model;
 
 namespace Nomad.DotNet.API
 {
-    public class AclPoliciesApi : NomadApi<AclPolicy>
+    public class AclPolicies : NomadApi<AclPolicy>
     {
         protected override string resourceName => "acl/policy";
 
         protected override string collectionName => "acl/policies";
 
-        public AclPoliciesApi(HttpClient httpClient, NomadApiConfig apiConfig) : base(httpClient, apiConfig)
+        public AclPolicies(HttpClient httpClient, NomadApiConfig apiConfig) : base(httpClient, apiConfig)
         { }
 
         public async Task<AclPolicy> Read(string id)

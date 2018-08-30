@@ -11,11 +11,11 @@ using JobPlanResponse = Nomad.DotNet.API.JobRequests.JobPlanResponse;
 
 namespace Nomad.DotNet.API
 {
-    public class JobsApi : NomadApi<Job>
+    public class Jobs : NomadApi<Job>
     {
         protected override string resourceName => "job";
         protected override string collectionName => "jobs";
-        public JobsApi(HttpClient httpClient, NomadApiConfig apiConfig) : base(httpClient, apiConfig)
+        public Jobs(HttpClient httpClient, NomadApiConfig apiConfig) : base(httpClient, apiConfig)
         { }
 
         public async Task<Job> Read(string id)

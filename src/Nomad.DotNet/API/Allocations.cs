@@ -8,12 +8,12 @@ using Nomad.DotNet.UriUtilities;
 
 namespace Nomad.DotNet.API
 {
-    public class AllocationsApi : NomadApi<Allocation>
+    public class Allocations : NomadApi<Allocation>
     {
         protected override string resourceName => "allocation";
         protected override string collectionName => "allocations";
 
-        public AllocationsApi(HttpClient httpClient, NomadApiConfig apiConfig) :
+        public Allocations(HttpClient httpClient, NomadApiConfig apiConfig) :
             base(httpClient, apiConfig)
         { }
 
