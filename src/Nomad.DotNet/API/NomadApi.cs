@@ -42,7 +42,7 @@ namespace Nomad.DotNet.API
 
         protected Uri buildResourceUriForList(string prefix)
         {
-            Uri uri = buildCollenctionUri();
+            Uri uri = buildCollectionUri();
 
             if (!string.IsNullOrEmpty(prefix))
                 uri = appendPrefixToUri(uri, prefix);
@@ -75,7 +75,7 @@ namespace Nomad.DotNet.API
 
             return builder.Uri;
         }
-        protected Uri buildCollenctionUri(string method = null)
+        protected Uri buildCollectionUri(string method = null)
         {
             BetterUriBuilder builder = new BetterUriBuilder(apiConfig.HostUri);
 

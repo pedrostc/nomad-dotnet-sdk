@@ -36,7 +36,7 @@ namespace Nomad.DotNet.API
 
         public async Task<JobCreateResponse> Create(JobCreateRequest requestObj)
         {
-            Uri uri = buildCollenctionUri();
+            Uri uri = buildCollectionUri();
             JobCreateResponse response = await ProcessPostAsync<JobCreateResponse>(uri, requestObj);
 
             return response;
@@ -44,7 +44,7 @@ namespace Nomad.DotNet.API
 
         public async Task<Job> Parse(JobParseRequest requestObj)
         {
-            Uri uri = buildCollenctionUri("parse");
+            Uri uri = buildCollectionUri("parse");
             Job response = await ProcessPostAsync<Job>(uri, requestObj);
 
             return response;
