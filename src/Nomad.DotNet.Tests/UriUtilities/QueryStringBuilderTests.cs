@@ -31,19 +31,6 @@ namespace Nomad.DotNet.Tests.UriUtilities
         }
 
         [TestMethod]
-        public void UpdateField_ValidField_QueryStringPropHasCorrectValue()
-        {
-            string ExpectedQueryString = "field1=value1&field2=value3";
-            QueryStringBuilder qsBuilder = new QueryStringBuilder();
-            qsBuilder.AddField("field1", "value1");
-            qsBuilder.AddField("field2", "value2");
-
-            qsBuilder.UpdateField("field2", "value3");
-
-            Assert.AreEqual(ExpectedQueryString, qsBuilder.QueryString);
-        }
-
-        [TestMethod]
         public void RemoveField_OnlyField_QueryStringShouldBeEmptyString()
         {
             QueryStringBuilder qsBuilder = new QueryStringBuilder();

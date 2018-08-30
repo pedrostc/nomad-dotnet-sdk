@@ -22,7 +22,8 @@ namespace Nomad.DotNet.UriUtilities
             get
             {
                 return pathParts.Count > 0 ?
-                    pathParts.Aggregate((path, part) => $"{path}/{part}") :
+                    pathParts
+                    .Aggregate((path, part) => $"{path??"/"}/{part}") :
                     string.Empty;
             }
         }

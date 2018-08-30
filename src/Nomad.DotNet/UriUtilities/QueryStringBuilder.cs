@@ -6,7 +6,7 @@ namespace Nomad.DotNet.UriUtilities
 {
     public class QueryStringBuilder
     {
-        private IDictionary<string, string> fields;
+        private IList<KeyValuePair<string, string>> fields;
 
         public string QueryString
         {
@@ -23,24 +23,21 @@ namespace Nomad.DotNet.UriUtilities
 
         public QueryStringBuilder()
         {
-            fields = new Dictionary<string, string>();
+            fields = new List<KeyValuePair<string, string>>();
         }
 
         public void AddField(string name, string value)
         {
-            fields.Add(name, value);
-        }
-        public void UpdateField(string name, string value)
-        {
-            fields[name] = value;
+            fields.Add(new KeyValuePair<string, string>(name, value));
         }
         public void RemoveField(string name)
         {
-            fields.Remove(name);
+            var items = fields.Where(item => item.Key == name).ToList();
+            items.ForEach(item => fields.Remove(item));
         }
         public bool ContainsField(string name)
         {
-            return fields.ContainsKey(name);
+            return fields.Any(item => item.Key == name);
         }
         public void Clear()
         {

@@ -100,6 +100,33 @@ namespace Nomad.DotNet.Tests.UriUtilities
         }
 
         [TestMethod]
+        public void AddPathPart_MultiplePartsWithNull_UriPropDoesNotContainNullPart()
+        {
+            string expectedUri = "http://127.0.0.1:8080/path//job";
+            BetterUriBuilder uriBuilder = new BetterUriBuilder("http://127.0.0.1:8080");
+
+            uriBuilder.AddPathPart("path");
+            uriBuilder.AddPathPart(null);
+            uriBuilder.AddPathPart("job");
+
+            Assert.AreEqual(expectedUri, uriBuilder.Uri.AbsoluteUri);
+        }
+
+        [TestMethod]
+        public void AddPathPart_MultipleNullParts_UriPropDoesNotContainNullParts()
+        {
+            string expectedUri = "http://127.0.0.1:8080///job";
+            BetterUriBuilder uriBuilder = new BetterUriBuilder("http://127.0.0.1:8080");
+
+            uriBuilder.AddPathPart(null);
+            uriBuilder.AddPathPart(null);
+            uriBuilder.AddPathPart("job");
+
+            Assert.AreEqual(expectedUri, uriBuilder.Uri.AbsoluteUri);
+        }
+
+
+        [TestMethod]
         public void RemovePathPart_OnlyPart_PathPropIsEmptyString()
         {
             BetterUriBuilder uriBuilder = new BetterUriBuilder();
