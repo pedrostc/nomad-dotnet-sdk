@@ -40,7 +40,7 @@ namespace Nomad.DotNet.API
             }
         }
 
-        protected Uri buildResourceUriForList(string prefix)
+        protected Uri buildResourceUriForList(string prefix = null)
         {
             Uri uri = buildCollectionUri();
 
@@ -56,19 +56,23 @@ namespace Nomad.DotNet.API
 
             return builder.Uri;
         }
+        
         protected Uri buildUriFor(string path)
         {
             BetterUriBuilder builder = new BetterUriBuilder(apiConfig.HostUri);
             builder.AddPathPart(path);
             return builder.Uri;
         }
-        protected Uri buildResourceUri(string id, string method = null)
+
+        protected Uri buildResourceUri(string id = null, string method = null)
         {
             BetterUriBuilder builder = new BetterUriBuilder(apiConfig.HostUri);
 
             builder.AddPathPart(apiVersion);
             builder.AddPathPart(resourceName);
-            builder.AddPathPart(id);
+
+            if(!string.IsNullOrWhiteSpace(id))
+                builder.AddPathPart(id);
 
             if (!string.IsNullOrEmpty(method))
                 builder.AddPathPart(method);
@@ -97,7 +101,7 @@ namespace Nomad.DotNet.API
 
             return versions;
         }
-        protected async Task<TResponse> ProcessPostAsync<TResponse>(Uri targetUri, object requestContent)
+        protected async Task<TResponse> ProcessPostAsync<TResponse>(Uri targetUri, object requestContent = null)
         {
             HttpResponseMessage responseMessage = await httpClient.PostAsJsonAsync(targetUri, requestContent);
 

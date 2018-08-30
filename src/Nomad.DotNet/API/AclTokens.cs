@@ -38,7 +38,7 @@ namespace Nomad.DotNet.API
         public async Task<AclToken> ReadSelf()
         {
             string methodName = "self";
-            Uri uri = buildResourceUri(null, methodName);
+            Uri uri = buildResourceUri(method: methodName);
             AclToken token = await ProcessGetAsync<AclToken>(uri);
 
             return token;
@@ -46,7 +46,7 @@ namespace Nomad.DotNet.API
 
         public async Task<IList<AclToken>> List()
         {
-            Uri uri = buildResourceUriForList(null);
+            Uri uri = buildResourceUriForList();
             IList<AclToken> tokens = await ProcessGetAsync<List<AclToken>>(uri);
 
             return tokens;
@@ -54,7 +54,7 @@ namespace Nomad.DotNet.API
 
         public async Task<AclToken> Create(AclToken requestObj)
         {
-            Uri uri = buildResourceUri(null);
+            Uri uri = buildResourceUri();
             AclToken token = await ProcessPostAsync<AclToken>(uri, requestObj);
 
             return token;
