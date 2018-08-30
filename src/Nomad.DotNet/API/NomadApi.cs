@@ -91,6 +91,12 @@ namespace Nomad.DotNet.API
             return builder.Uri;
         }
 
+        protected async Task SendGetAsync(Uri targetUri)
+        {
+            HttpResponseMessage response = await httpClient.GetAsync(targetUri);
+
+            await HandleReponseError(response);
+        }
         protected async Task<TResponse> ProcessGetAsync<TResponse>(Uri targetUri)
         {
             HttpResponseMessage response = await httpClient.GetAsync(targetUri);
@@ -107,13 +113,15 @@ namespace Nomad.DotNet.API
 
             await HandleReponseError(response);
 
-            string content = await response.Content.ReadAsStringAsync();
+            string content = await response.Content?.ReadAsStringAsync();
 
             return content;
         }
-        protected async Task ProcessPostAsync(Uri targetUri, object requestContent = null)
+        protected async Task SendPostAsync(Uri targetUri, object requestContent = null)
         {
-            await ProcessPostAsync<object>(targetUri, requestContent);
+            HttpResponseMessage responseMessage = await httpClient.PostAsJsonAsync(targetUri, requestContent);
+
+            await HandleReponseError(responseMessage);
         }
         protected async Task<TResponse> ProcessPostAsync<TResponse>(Uri targetUri, object requestContent = null)
         {
@@ -125,9 +133,11 @@ namespace Nomad.DotNet.API
 
             return response;
         }
-        protected async Task ProcessDeleteAsync(Uri targetUri)
+        protected async Task SendDeleteAsync(Uri targetUri)
         {
-            await ProcessDeleteAsync<object>(targetUri);
+            HttpResponseMessage responseMessage = await httpClient.DeleteAsync(targetUri);
+
+            await HandleReponseError(responseMessage);
         }
         protected async Task<TResponse> ProcessDeleteAsync<TResponse>(Uri targetUri)
         {

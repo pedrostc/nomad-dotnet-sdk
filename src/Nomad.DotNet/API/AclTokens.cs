@@ -71,7 +71,7 @@ namespace Nomad.DotNet.API
         public async System.Threading.Tasks.Task Delete(string acessorId)
         {
             Uri uri = buildResourceUri(acessorId);
-            await ProcessDeleteAsync(uri);
+            await SendDeleteAsync(uri);
         }
     }
 }
