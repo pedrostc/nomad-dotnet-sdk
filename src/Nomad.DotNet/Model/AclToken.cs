@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace Nomad.DotNet.Model
 {
-    public class AclToken : ApiObject<AclPolicy>
+    public class AclToken : ApiObject<AclToken>
     {
         public string AcessorId { get; set; }
         public string SecretId { get; set; }
