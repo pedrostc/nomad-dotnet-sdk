@@ -19,7 +19,7 @@ namespace Nomad.DotNet.API
 
         public async Task<Allocation> Read(string id)
         {
-            Uri uri = buildUriForResourceId(id);
+            Uri uri = buildResourceUri(id);
             Allocation allocation = await ProcessGetAsync<Allocation>(uri);
 
             return allocation;
@@ -27,7 +27,7 @@ namespace Nomad.DotNet.API
         }
         public async Task<IList<Allocation>> List(string prefix = null)
         {
-            Uri uri = buildUriForList(prefix);
+            Uri uri = buildResourceUriForList(prefix);
             IList<Allocation> allocations = await ProcessGetAsync<List<Allocation>>(uri);
 
             return allocations;

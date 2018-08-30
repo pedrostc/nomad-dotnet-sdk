@@ -18,21 +18,21 @@ namespace Nomad.DotNet.API
 
         public async Task<AclPolicy> Read(string id)
         {
-            Uri uri = buildUriForResourceId(id);
+            Uri uri = buildResourceUri(id);
             AclPolicy policy = await ProcessGetAsync<AclPolicy>(uri);
 
             return policy;
         }
         public async Task<IList<AclPolicy>> List(string prefix = null)
         {
-            Uri uri = buildUriForList(prefix);
-            IList<AclPolicy> jobs = await ProcessGetAsync<List<AclPolicy>>(uri);
+            Uri uri = buildResourceUriForList(prefix);
+            IList<AclPolicy> policies = await ProcessGetAsync<List<AclPolicy>>(uri);
 
-            return jobs;
+            return policies;
         }
         public async System.Threading.Tasks.Task Create(AclPolicy aclPolicy)
         {
-            Uri uri = buildUriForResourceId(aclPolicy.Name);
+            Uri uri = buildResourceUri(aclPolicy.Name);
             await ProcessPostAsync<string>(uri, aclPolicy);
         }
         public async System.Threading.Tasks.Task Update(AclPolicy aclPolicy)
@@ -41,7 +41,7 @@ namespace Nomad.DotNet.API
         }
         public async System.Threading.Tasks.Task Delete(string policyName)
         {
-            Uri uri = buildUriForResourceId(policyName);
+            Uri uri = buildResourceUri(policyName);
             await ProcessDeleteAsync<string>(uri);
         }
     }
