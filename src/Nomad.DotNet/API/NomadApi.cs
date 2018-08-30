@@ -101,15 +101,33 @@ namespace Nomad.DotNet.API
 
             return versions;
         }
+        protected async Task<string> ProcessGetTextAsync(Uri targetUri)
+        {
+            HttpResponseMessage response = await httpClient.GetAsync(targetUri);
+
+            await HandleReponseError(response);
+
+            string content = await response.Content.ReadAsStringAsync();
+
+            return content;
+        }
+        protected async Task ProcessPostAsync(Uri targetUri, object requestContent = null)
+        {
+            await ProcessPostAsync<object>(targetUri, requestContent);
+        }
         protected async Task<TResponse> ProcessPostAsync<TResponse>(Uri targetUri, object requestContent = null)
         {
             HttpResponseMessage responseMessage = await httpClient.PostAsJsonAsync(targetUri, requestContent);
 
             await HandleReponseError(responseMessage);
 
-            TResponse response = await responseMessage.Content.ReadAsAsync<TResponse>();
+            TResponse response = await responseMessage.Content?.ReadAsAsync<TResponse>();
 
             return response;
+        }
+        protected async Task ProcessDeleteAsync(Uri targetUri)
+        {
+            await ProcessDeleteAsync<object>(targetUri);
         }
         protected async Task<TResponse> ProcessDeleteAsync<TResponse>(Uri targetUri)
         {
@@ -117,7 +135,7 @@ namespace Nomad.DotNet.API
 
             await HandleReponseError(responseMessage);
 
-            TResponse response = await responseMessage.Content.ReadAsAsync<TResponse>();
+            TResponse response = await responseMessage.Content?.ReadAsAsync<TResponse>();
 
             return response;
         }

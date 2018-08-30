@@ -33,7 +33,7 @@ namespace Nomad.DotNet.API
         public async System.Threading.Tasks.Task Create(AclPolicy aclPolicy)
         {
             Uri uri = buildResourceUri(aclPolicy.Name);
-            await ProcessPostAsync<string>(uri, aclPolicy);
+            await ProcessPostAsync(uri, aclPolicy);
         }
         public async System.Threading.Tasks.Task Update(AclPolicy aclPolicy)
         {
@@ -42,7 +42,7 @@ namespace Nomad.DotNet.API
         public async System.Threading.Tasks.Task Delete(string policyName)
         {
             Uri uri = buildResourceUri(policyName);
-            await ProcessDeleteAsync<string>(uri);
+            await ProcessDeleteAsync(uri);
         }
     }
 }

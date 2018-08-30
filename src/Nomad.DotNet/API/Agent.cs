@@ -46,7 +46,7 @@ namespace Nomad.DotNet.API
         {
             Uri baseUri = buildResourceUri(method: "servers");
             Uri uri = buildUriForServers(baseUri, servers);
-            await ProcessPostAsync<string>(uri);
+            await ProcessPostAsync(uri);
         }
 
         public async Task<AgentSelf> QuerySelf()
@@ -78,7 +78,7 @@ namespace Nomad.DotNet.API
         {
             Uri baseUri = buildResourceUri(method: "force-leave");
             Uri uri = buildUriForForceLeave(baseUri, nodeName);
-            await ProcessPostAsync<string>(uri);
+            await ProcessPostAsync(uri);
         }
 
         public async Task<AgentHealthResponse> Health()
