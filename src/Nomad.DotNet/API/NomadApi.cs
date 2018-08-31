@@ -59,6 +59,7 @@ namespace Nomad.DotNet.API
         protected Uri buildUriFor(string path)
         {
             BetterUriBuilder builder = new BetterUriBuilder(apiConfig.HostUri);
+            builder.AddPathPart(apiVersion);
             builder.AddPathPart(path);
             return builder.Uri;
         }
