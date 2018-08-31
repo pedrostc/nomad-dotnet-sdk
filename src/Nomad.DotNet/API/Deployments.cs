@@ -2,10 +2,8 @@
 using Nomad.DotNet.Model;
 using Nomad.DotNet.UriUtilities;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Nomad.DotNet.API
@@ -50,7 +48,8 @@ namespace Nomad.DotNet.API
         public async Task<IList<Allocation>> Allocations(string id)
         {
             Uri uri = buildUriForDeployment(id, "allocations");
-            IList<Allocation> allocations = await ProcessGetAsync<IList<Allocation>>(uri);
+            IList<Allocation> allocations = 
+                await ProcessGetAsync<IList<Allocation>>(uri);
 
             return allocations;
         }
