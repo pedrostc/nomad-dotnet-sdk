@@ -148,5 +148,10 @@ namespace Nomad.DotNet.API
 
             return response;
         }
+        protected async Task SendPutAsync(Uri targetUri)
+        {
+            HttpResponseMessage responseMessage = await httpClient.PutAsync(targetUri, null);
+            await HandleReponseError(responseMessage);
+        }
     }
 }
