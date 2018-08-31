@@ -21,7 +21,7 @@ namespace Nomad.DotNet.API
 
         public async Task<IList<Deployment>> List(string prefix)
         {
-            Uri uri = buildResourceUriForList(prefix);
+            Uri uri = buildCollectionUriForList(prefix);
             IList<Deployment> deployments = await ProcessGetAsync<List<Deployment>>(uri);
 
             return deployments;

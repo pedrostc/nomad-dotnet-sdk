@@ -46,7 +46,7 @@ namespace Nomad.DotNet.API
 
         public async Task<IList<AclToken>> List()
         {
-            Uri uri = buildResourceUriForList();
+            Uri uri = buildCollectionUriForList();
             IList<AclToken> tokens = await ProcessGetAsync<List<AclToken>>(uri);
 
             return tokens;

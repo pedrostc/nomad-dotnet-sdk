@@ -25,7 +25,7 @@ namespace Nomad.DotNet.API
         }
         public async Task<IList<AclPolicy>> List(string prefix = null)
         {
-            Uri uri = buildResourceUriForList(prefix);
+            Uri uri = buildCollectionUriForList(prefix);
             IList<AclPolicy> policies = await ProcessGetAsync<List<AclPolicy>>(uri);
 
             return policies;

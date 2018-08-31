@@ -39,7 +39,7 @@ namespace Nomad.DotNet.API
             }
         }
 
-        protected Uri buildResourceUriForList(string prefix = null)
+        protected Uri buildCollectionUriForList(string prefix = null)
         {
             Uri uri = buildCollectionUri();
 
