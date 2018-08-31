@@ -2,11 +2,8 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-
 using Nomad.DotNet.Exceptions;
 using Nomad.DotNet.UriUtilities;
-
-
 
 namespace Nomad.DotNet.API
 {
@@ -21,7 +18,9 @@ namespace Nomad.DotNet.API
         private Uri baseUri;
         private NomadApiConfig apiConfig;
 
-        public NomadApi(HttpClient httpClient, NomadApiConfig apiConfig)
+        public NomadApi(
+            HttpClient httpClient, 
+            NomadApiConfig apiConfig)
         {
             this.httpClient = httpClient;
             this.baseUri = new Uri(apiConfig.HostUri);

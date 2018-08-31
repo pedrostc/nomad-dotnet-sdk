@@ -452,5 +452,7 @@ namespace Nomad.DotNet.Tests.UriUtilities
 
             Assert.AreEqual(onlyPathUri, uriBuilder.Uri.AbsoluteUri);
         }
+
+
     }
 }
