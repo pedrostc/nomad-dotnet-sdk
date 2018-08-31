@@ -26,7 +26,7 @@ namespace Nomad.DotNet.Tests.API
 
             Client api = new Client(mockHttp.ToHttpClient(), apiConfig);
 
-            string response = api.ReadFile(allocationId).GetAwaiter().GetResult();
+            string response = api.ReadFile(allocationId, "/file.txt").GetAwaiter().GetResult();
 
             Assert.AreEqual(fileContent, response);
         }
