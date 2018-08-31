@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Nomad.DotNet.Model;
 using Nomad.DotNet.UriUtilities;
 
+//TODO: Implement STREAM methods.
 namespace Nomad.DotNet.API
 {
     public class Client : NomadApi
@@ -141,7 +142,5 @@ namespace Nomad.DotNet.API
             Uri uri = buildResourceUri(method: "gc");
             await SendGetAsync(uri);
         }
-
-        //TODO: Implement STREAM methods.
     }
 }
