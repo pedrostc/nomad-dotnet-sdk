@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 
@@ -24,6 +25,19 @@ namespace Nomad.DotNet.UriUtilities
         public QueryStringBuilder()
         {
             fields = new List<KeyValuePair<string, string>>();
+        }
+        public QueryStringBuilder(string baseQuery): this()
+        {
+            initializeFields(baseQuery);
+        }
+
+        private void initializeFields(string baseQuery)
+        {
+            NameValueCollection baseFields = HttpUtility.ParseQueryString(baseQuery);
+            baseFields.AllKeys
+                .SelectMany(baseFields.GetValues, (key, value) => new { key, value })
+                .ToList()
+                .ForEach(item => AddField(item.key, item.value));
         }
 
         public void AddField(string name, string value)

@@ -64,5 +64,46 @@ namespace Nomad.DotNet.Tests.UriUtilities
 
             Assert.AreEqual(string.Empty, qsBuilder.QueryString);
         }
+
+        [TestMethod]
+        public void Constructor_ValidQueryString_QueryStringPropShouldBeCorrect()
+        {
+            string queryString = "field1=value1&field2=value2&field3=value3";
+
+            QueryStringBuilder qsBuilder = new QueryStringBuilder(queryString);
+
+            Assert.AreEqual(queryString, qsBuilder.QueryString);
+        }
+
+        [TestMethod]
+        public void ContainsField_CtorValidQueryString_ShouldFindField()
+        {
+            string queryString = "field1=value1&field2=value2&field3=value3";
+            QueryStringBuilder qsBuilder = new QueryStringBuilder(queryString);
+
+            Assert.IsTrue(qsBuilder.ContainsField("field2"));
+        }
+
+        [TestMethod]
+        public void RemoveField_CtorValidQueryString_QueryStringShouldBeCorrect()
+        {
+            string queryString = "field1=value1&field2=value2&field3=value3";
+            string expectedQueryString = "field1=value1&field3=value3";
+            QueryStringBuilder qsBuilder = new QueryStringBuilder(queryString);
+            qsBuilder.RemoveField("field2");
+
+            Assert.AreEqual(expectedQueryString, qsBuilder.QueryString);
+        }
+
+        [TestMethod]
+        public void AddField_CtorValidQueryString_QueryStringShouldBeCorrect()
+        {
+            string queryString = "field1=value1&field2=value2&field3=value3";
+            string expectedQueryString = "field1=value1&field2=value2&field3=value3&field4=value4";
+            QueryStringBuilder qsBuilder = new QueryStringBuilder(queryString);
+            qsBuilder.AddField("field4", "value4");
+
+            Assert.AreEqual(expectedQueryString, qsBuilder.QueryString);
+        }
     }
 }

@@ -49,6 +49,17 @@ namespace Nomad.DotNet.Tests.UriUtilities
         }
 
         [TestMethod]
+        public void Constructor_UriWithQueryString_QueryPropShouldBeCorrect()
+        {
+            string expectedQuery = "field1=value1&field2=value2";
+            Uri uri = new Uri("http://127.0.0.1:8080/?field1=value1&field2=value2");
+
+            BetterUriBuilder builder = new BetterUriBuilder(uri);
+
+            Assert.AreEqual(expectedQuery, builder.Query);
+        }
+
+        [TestMethod]
         public void Constructor_SchemeHostName_UriPropShouldBeCorrect()
         {
             string scheme = "http";
@@ -309,6 +320,30 @@ namespace Nomad.DotNet.Tests.UriUtilities
         }
 
         [TestMethod]
+        public void AddQueryField_BaseUriWithPath_QueryPropHasCorrectValue()
+        {
+            string expectedQuery = "field1=value1&field2=value2&field3=value3";
+            Uri uri = new Uri("http://127.0.0.1:8080/?field1=value1&field2=value2");
+            BetterUriBuilder uriBuilder = new BetterUriBuilder(uri);
+
+            uriBuilder.AddQueryField("field3", "value3");
+
+            Assert.AreEqual(expectedQuery, uriBuilder.Query);
+        }
+
+        [TestMethod]
+        public void AddQueryField_BaseUriWithPath_UriHasCorrectValue()
+        {
+            string expectedUri = "http://127.0.0.1:8080/?field1=value1&field2=value2&field3=value3";
+            Uri uri = new Uri("http://127.0.0.1:8080/?field1=value1&field2=value2");
+            BetterUriBuilder uriBuilder = new BetterUriBuilder(uri);
+
+            uriBuilder.AddQueryField("field3", "value3");
+
+            Assert.AreEqual(expectedUri, uriBuilder.Uri.AbsoluteUri);
+        }
+
+        [TestMethod]
         public void RemoveQueryField_SingleField_UriShouldBeCorrect()
         {
             string expectedUri = "http://127.0.0.1:8080/?other=value2";
@@ -318,6 +353,30 @@ namespace Nomad.DotNet.Tests.UriUtilities
             uriBuilder.AddQueryField("other", "value2");
 
             uriBuilder.RemoveQueryField("field");
+
+            Assert.AreEqual(expectedUri, uriBuilder.Uri.AbsoluteUri);
+        }
+
+        [TestMethod]
+        public void RemoveQueryField_BaseUriWithPath_QueryPropHasCorrectValue()
+        {
+            string expectedQuery = "field1=value1&field2=value2";
+            Uri uri = new Uri("http://127.0.0.1:8080/?field1=value1&field2=value2&field3=value3");
+            BetterUriBuilder uriBuilder = new BetterUriBuilder(uri);
+
+            uriBuilder.RemoveQueryField("field3");
+
+            Assert.AreEqual(expectedQuery, uriBuilder.Query);
+        }
+
+        [TestMethod]
+        public void RemoveQueryField_BaseUriWithPath_UriHasCorrectValue()
+        {
+            string expectedUri = "http://127.0.0.1:8080/?field1=value1&field2=value2";
+            Uri uri = new Uri("http://127.0.0.1:8080/?field1=value1&field2=value2&field3=value3");
+            BetterUriBuilder uriBuilder = new BetterUriBuilder(uri);
+
+            uriBuilder.RemoveQueryField("field3");
 
             Assert.AreEqual(expectedUri, uriBuilder.Uri.AbsoluteUri);
         }
@@ -393,6 +452,5 @@ namespace Nomad.DotNet.Tests.UriUtilities
 
             Assert.AreEqual(onlyPathUri, uriBuilder.Uri.AbsoluteUri);
         }
-
     }
 }

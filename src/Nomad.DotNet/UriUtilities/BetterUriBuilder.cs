@@ -100,7 +100,7 @@ namespace Nomad.DotNet.UriUtilities
 
         private void initializeQuery()
         {
-
+            queryBuilder = new QueryStringBuilder(uriBuilder.Query);
         }
         private void updateBuilderQuery()
         {
