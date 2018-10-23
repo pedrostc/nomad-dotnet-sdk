@@ -36,6 +36,9 @@ namespace Nomad.DotNet.API
                 case (HttpStatusCode.BadRequest):
                     string errorMsg = await response.Content.ReadAsStringAsync();
                     throw new BadRequest(errorMsg);
+                case (HttpStatusCode.InternalServerError):
+                    string internalErrorMsg = await response.Content.ReadAsStringAsync();
+                    throw new SystemException(internalErrorMsg);
             }
         }
 
