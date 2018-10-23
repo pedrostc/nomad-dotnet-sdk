@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Nomad.DotNet.Model;
 using Nomad.DotNet.UriUtilities;
 
@@ -13,6 +14,11 @@ namespace Nomad.DotNet.API
         private const string PATH_QUERY_FIELD = "path";
         private const string OFFSET_QUERY_FIELD = "offset";
         private const string LIMIT_QUERY_FIELD = "limit";
+        private const string TASK_QUERY_FIELD = "task";
+        private const string FOLLOW_QUERY_FIELD = "follow";
+        private const string TYPE_QUERY_FIELD = "type";
+        private const string ORIGIN_QUERY_FIELD = "origin";
+        private const string PLAIN_QUERY_FIELD = "plain";
         
         private const string FILE_SYSTEM_PATH = "fs";
         private const string ALLOCATION_PATH = "allocation";
@@ -132,6 +138,49 @@ namespace Nomad.DotNet.API
             return files;
         }
 
+        private Uri buildStreamLogsUri(
+            string allocationId,
+            string task,
+            LogType type,
+            OffsetOrigin origin,
+            int offset,
+            bool follow,
+            bool plain)
+        {
+            Uri baseUri = buildResourceUri();
+            BetterUriBuilder builder = new BetterUriBuilder(baseUri);
+
+            builder.AddPathPart(FILE_SYSTEM_PATH);
+            builder.AddPathPart("logs");
+            builder.AddPathPart(allocationId);
+
+            builder.AddQueryField(TASK_QUERY_FIELD, task);
+            builder.AddQueryField(FOLLOW_QUERY_FIELD, follow.ToString());
+            builder.AddQueryField(TYPE_QUERY_FIELD, type.ToString());
+            builder.AddQueryField(OFFSET_QUERY_FIELD, offset.ToString());
+            builder.AddQueryField(ORIGIN_QUERY_FIELD, origin.ToString());
+            builder.AddQueryField(PLAIN_QUERY_FIELD, plain.ToString());
+
+            return builder.Uri;
+        }
+        public async Task<FileContent> StreamLogs(
+            string allocationId,
+            string task,
+            LogType type,
+            int offset = 0,
+            OffsetOrigin origin = OffsetOrigin.start,
+            bool follow = false,
+            bool plain = false)
+        {
+
+            Uri uri = buildStreamLogsUri(allocationId, 
+                task, type, origin, offset, follow, plain);
+            string fileContentString = await ProcessGetTextAsync(uri);
+            FileContent fileContent = JsonConvert.DeserializeObject<FileContent>(fileContentString);
+            
+            return fileContent;
+        }
+
         public async System.Threading.Tasks.Task GCAllocation(string allocationId)
         {
             Uri uri = buildAllocationUri("gc", allocationId);
@@ -142,5 +191,17 @@ namespace Nomad.DotNet.API
             Uri uri = buildResourceUri(method: "gc");
             await SendGetAsync(uri);
         }
+    }
+
+    public enum OffsetOrigin
+    {
+        start,
+        end
+    }
+
+    public enum LogType
+    {
+        stderr,
+        stdout
     }
 }
