@@ -19,8 +19,13 @@ namespace Nomad.DotNet.API
         private const string TYPE_QUERY_FIELD = "type";
         private const string ORIGIN_QUERY_FIELD = "origin";
         private const string PLAIN_QUERY_FIELD = "plain";
-        
+
+        private const string GARBAGE_COLLECTOR_METHOD = "gc";
+        private const string READ_FILE_METHOD = "cat";
+
         private const string FILE_SYSTEM_PATH = "fs";
+        private const string STREAM_LOGS_PATH = "logs";
+        private const string STREAM_FILE_PATH = "stream";
         private const string ALLOCATION_PATH = "allocation";
 
         public Client(HttpClient httpClient, NomadApiConfig apiConfig) :
@@ -79,7 +84,7 @@ namespace Nomad.DotNet.API
         }
         public async Task<string> ReadFile(string allocationId, string path)
         {
-            Uri uri = buildFileSystemUri("cat", allocationId, path);
+            Uri uri = buildFileSystemUri(READ_FILE_METHOD, allocationId, path);
             string fileContent = await ProcessGetTextAsync(uri);
 
             return fileContent;
@@ -151,7 +156,7 @@ namespace Nomad.DotNet.API
             BetterUriBuilder builder = new BetterUriBuilder(baseUri);
 
             builder.AddPathPart(FILE_SYSTEM_PATH);
-            builder.AddPathPart("logs");
+            builder.AddPathPart(STREAM_LOGS_PATH);
             builder.AddPathPart(allocationId);
 
             builder.AddQueryField(TASK_QUERY_FIELD, task);
@@ -181,14 +186,47 @@ namespace Nomad.DotNet.API
             return fileContent;
         }
 
+        private Uri buildStreamFileUri(
+            string allocationId,
+            string path,
+            OffsetOrigin origin,
+            int offset)
+        {
+            Uri baseUri = buildResourceUri();
+            BetterUriBuilder builder = new BetterUriBuilder(baseUri);
+
+            builder.AddPathPart(FILE_SYSTEM_PATH);
+            builder.AddPathPart(STREAM_FILE_PATH);
+            builder.AddPathPart(allocationId);
+
+            builder.AddQueryField(PATH_QUERY_FIELD, path);
+            builder.AddQueryField(OFFSET_QUERY_FIELD, offset.ToString());
+            builder.AddQueryField(ORIGIN_QUERY_FIELD, origin.ToString());
+
+            return builder.Uri;
+        }
+        public async Task<FileContent> StreamFile(
+            string allocationId,
+            string path,
+            int offset = 0,
+            OffsetOrigin origin = OffsetOrigin.start)
+        {
+
+            Uri uri = buildStreamFileUri(allocationId, path, origin, offset);
+            string fileContentString = await ProcessGetTextAsync(uri);
+            FileContent fileContent = JsonConvert.DeserializeObject<FileContent>(fileContentString);
+
+            return fileContent;
+        }
+
         public async System.Threading.Tasks.Task GCAllocation(string allocationId)
         {
-            Uri uri = buildAllocationUri("gc", allocationId);
+            Uri uri = buildAllocationUri(GARBAGE_COLLECTOR_METHOD, allocationId);
             await SendGetAsync(uri);
         }
         public async System.Threading.Tasks.Task GCAllAllocations(string allocationId)
         {
-            Uri uri = buildResourceUri(method: "gc");
+            Uri uri = buildResourceUri(method: GARBAGE_COLLECTOR_METHOD);
             await SendGetAsync(uri);
         }
     }
