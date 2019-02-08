@@ -15,6 +15,7 @@ namespace Nomad.DotNet.API
         private const string ADDRESS_QUERY_FIELD = "address";
 
         private const string RAFT_PATH = "raft";
+        private const string AUTOPILOT_PATH = "autopilot";
         private const string CONFIGURATION_PATH = "configuration";
         private const string PEER_PATH = "peer";
 
@@ -39,7 +40,7 @@ namespace Nomad.DotNet.API
 
             return builder.Uri;
         }
-        public async Task<RaftConfiguration> GetRaftConfiguration(bool stale = false)
+        public async Task<RaftConfiguration> ReadRaftConfiguration(bool stale = false)
         {
             Uri uri = buildRaftConfigurationUri(stale);
             RaftConfiguration raftConfiguration = await ProcessGetAsync<RaftConfiguration>(uri);
@@ -89,6 +90,30 @@ namespace Nomad.DotNet.API
             object raftConfiguration = await ProcessDeleteAsync<object>(uri);
 
             return raftConfiguration;
+        }
+
+        private BetterUriBuilder getAutopilotUriBuilder()
+        {
+            Uri baseUri = buildResourceUri();
+            BetterUriBuilder builder = new BetterUriBuilder(baseUri);
+
+            builder.AddPathPart(AUTOPILOT_PATH);
+
+            return builder;
+        }
+        private Uri buildAutopilotConfigUri()
+        {
+            BetterUriBuilder autopilotUriBuilder = getAutopilotUriBuilder();
+            autopilotUriBuilder.AddPathPart(CONFIGURATION_PATH);
+
+            return autopilotUriBuilder.Uri;
+        }
+        public async Task<AutopilotConfiguration> ReadAutopilotConfiguration()
+        {
+            Uri uri = buildAutopilotConfigUri();
+            AutopilotConfiguration response = await ProcessGetAsync<AutopilotConfiguration>(uri);
+
+            return response;
         }
     }
 }
